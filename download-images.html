@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Resources Downloader</title>
+    <style>
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2D3436;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #00B894;
+            text-align: center;
+        }
+        .instructions {
+            background-color: #F5F6FA;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .resource-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .resource-item {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        .resource-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .resource-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        .resource-info {
+            padding: 15px;
+        }
+        .resource-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #00B894 0%, #6C5CE7 100%);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            margin-right: 5px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .description {
+            font-size: 12px;
+            color: #636E72;
+            margin-bottom: 10px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blockchain Resources Downloader</h1>
+    
+    <div class="instructions">
+        <h2>Instructions</h2>
+        <p>This page allows you to download high-quality images for your blockchain website and also provides links to reliable blockchain resources for each topic.</p>
+        <ol>
+            <li>Click on "Download All" to download all images at once, or download individual images</li>
+            <li>Images will be saved to your downloads folder</li>
+            <li>Copy the images to your assets folder in the correct structure</li>
+            <li>Follow the links to reliable resources for each topic</li>
+        </ol>
+    </div>
+    
+    <div class="controls">
+        <button id="downloadAll" class="btn">Download All Images</button>
+    </div>
+    
+    <div id="status" class="status" style="display: none;"></div>
+    
+    <div class="resource-list" id="resourceList">
+        <!-- Resources will be populated here -->
+    </div>
+
+    <script>
+        // Resources mapping
+        const resources = {
+            // Getting Started
+            'blockchain-basics': {
+                image: 'https://www.investopedia.com/thmb/O38COhzRZ5_P1qjUJvHC5kNSn5c=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Blockchain_final-086b5204fe4b4d40814559cf27b9c193.png',
+                link: 'https://www.investopedia.com/terms/b/blockchain.asp',
+                description: 'Learn about blockchain fundamentals from Investopedia',
+                category: 'blockchain'
+            },
+            'cryptography': {
+                image: 'https://www.techtarget.com/searchsecurity/wp-content/uploads/sites/14/2021/11/encryption.jpg',
+                link: 'https://www.techtarget.com/searchsecurity/definition/cryptography',
+                description: 'Understand cryptography basics from TechTarget',
+                category: 'blockchain'
+            },
+            'consensus': {
+                image: 'https://101blockchains.com/wp-content/uploads/2020/01/Consensus_algorithm_blockchain.png',
+                link: 'https://ethereum.org/en/developers/docs/consensus-mechanisms/',
+                description: 'Explore consensus mechanisms on Ethereum.org',
+                category: 'blockchain'
+            },
+
+            // Smart Contracts
+            'solidity': {
+                image: 'https://soliditylang.org/images/socialcard.jpg',
+                link: 'https://soliditylang.org/',
+                description: 'Official Solidity programming language documentation',
+                category: 'smart-contracts'
+            },
+            'rust': {
+                image: 'https://www.rust-lang.org/static/images/rust-social-wide.jpg',
+                link: 'https://www.rust-lang.org/',
+                description: 'Official Rust programming language site',
+                category: 'smart-contracts'
+            },
+            'security': {
+                image: 'https://www.immunebytes.com/blog/wp-content/uploads/2023/02/Smart-contract-security-audits-1400x651.jpg',
+                link: 'https://consensys.io/diligence/blog/2019/09/stop-using-soliditys-transfer-now/',
+                description: 'Smart contract security best practices from ConsenSys',
+                category: 'smart-contracts'
+            },
+            'truffle': {
+                image: 'https://trufflesuite.com/img/truffle-logo-dark.svg',
+                link: 'https://trufflesuite.com/',
+                description: 'Official Truffle Suite development environment',
+                category: 'tools'
+            },
+            'hardhat': {
+                image: 'https://hardhat.org/_next/static/media/hardhat-logo.5c5f687b.svg',
+                link: 'https://hardhat.org/',
+                description: 'Official Hardhat development environment',
+                category: 'tools'
+            },
+            'remix': {
+                image: 'https://remix-project.org/img/wordmarkLight.png',
+                link: 'https://remix.ethereum.org/',
+                description: 'Remix IDE for smart contract development',
+                category: 'tools'
+            },
+            'anchor': {
+                image: 'https://www.anchor-lang.com/_next/image?url=%2Flogo.png&w=256&q=75',
+                link: 'https://www.anchor-lang.com/',
+                description: 'Anchor framework for Solana development',
+                category: 'tools'
+            },
+            'ethereum': {
+                image: 'https://ethereum.org/static/a110735dade3f354a46fc2446cd52476/f3a29/ethereum-logo-portrait-black-gray.webp',
+                link: 'https://ethereum.org/',
+                description: 'Official Ethereum blockchain platform',
+                category: 'platforms'
+            },
+            'solana': {
+                image: 'https://solana.com/_next/static/media/logotype.e4df684f.svg',
+                link: 'https://solana.com/',
+                description: 'Official Solana blockchain platform',
+                category: 'platforms'
+            },
+            'polkadot': {
+                image: 'https://polkadot.network/assets/img/logo-polkadot.svg',
+                link: 'https://polkadot.network/',
+                description: 'Official Polkadot blockchain platform',
+                category: 'platforms'
+            },
+
+            // DeFi
+            'yield-farming': {
+                image: 'https://assets-global.website-files.com/64d1e7a51a22b6ca07db7d26/64e380f648ce9db8f58c4e9b_Liquidity-Farming-Guide.jpg',
+                link: 'https://ethereum.org/en/defi/#yield-farming',
+                description: 'Learn about yield farming on Ethereum.org',
+                category: 'defi'
+            },
+            'dex': {
+                image: 'https://d1-invdn-com.investing.com/content/pic7dc71a7d71f94663a28472711e7bfce3.jpg',
+                link: 'https://ethereum.org/en/defi/#dex',
+                description: 'Understand decentralized exchanges on Ethereum.org',
+                category: 'defi'
+            },
+            'lending': {
+                image: 'https://cryptonews.com/wp-content/uploads/2023/06/defi-lending.jpg',
+                link: 'https://ethereum.org/en/defi/#lending',
+                description: 'Learn about DeFi lending on Ethereum.org',
+                category: 'defi'
+            },
+            'aave': {
+                image: 'https://aave.com/_next/static/media/aave.aea953c6.svg',
+                link: 'https://aave.com/',
+                description: 'Official Aave lending protocol',
+                category: 'defi'
+            },
+            'uniswap': {
+                image: 'https://uniswap.org/images/twitter-card.jpg',
+                link: 'https://uniswap.org/',
+                description: 'Official Uniswap decentralized exchange',
+                category: 'defi'
+            },
+            'compound': {
+                image: 'https://compound.finance/images/compound-logo.svg',
+                link: 'https://compound.finance/',
+                description: 'Official Compound DeFi protocol',
+                category: 'defi'
+            },
+            'makerdao': {
+                image: 'https://makerdao.com/dai-logo.svg',
+                link: 'https://makerdao.com/',
+                description: 'Official MakerDAO platform',
+                category: 'defi'
+            }
+        };
+
+        // Function to create resource items
+        function createResourceItems() {
+            const resourceList = document.getElementById('resourceList');
+            resourceList.innerHTML = '';
+
+            for (const [key, resource] of Object.entries(resources)) {
+                // Format the key for display
+                const displayName = key.split('-').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ');
+                
+                // Create resource item
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'resource-item';
+                
+                // Create image element
+                const img = document.createElement('img');
+                img.src = resource.image;
+                img.alt = displayName;
+                
+                // Create info section
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'resource-info';
+                
+                // Add title
+                const title = document.createElement('h3');
+                title.textContent = displayName;
+                
+                // Add description
+                const description = document.createElement('p');
+                description.className = 'description';
+                description.textContent = resource.description;
+                
+                // Add download button
+                const downloadBtn = document.createElement('a');
+                downloadBtn.className = 'btn';
+                downloadBtn.textContent = 'Download';
+                downloadBtn.href = '#';
+                downloadBtn.onclick = function(e) {
+                    e.preventDefault();
+                    downloadImage(resource.image, `${key}.${getExtension(resource.image)}`);
+                };
+                
+                // Add link button
+                const linkBtn = document.createElement('a');
+                linkBtn.className = 'btn';
+                linkBtn.textContent = 'View Resource';
+                linkBtn.href = resource.link;
+                linkBtn.target = '_blank';
+                
+                // Assemble the item
+                infoDiv.appendChild(title);
+                infoDiv.appendChild(description);
+                infoDiv.appendChild(downloadBtn);
+                infoDiv.appendChild(linkBtn);
+                
+                itemDiv.appendChild(img);
+                itemDiv.appendChild(infoDiv);
+                
+                resourceList.appendChild(itemDiv);
+            }
+        }
+
+        // Get file extension from URL
+        function getExtension(url) {
+            const pathname = new URL(url).pathname;
+            const extension = pathname.split('.').pop();
+            return ['jpg', 'jpeg', 'png', 'svg', 'webp'].includes(extension) ? extension : 'jpg';
+        }
+
+        // Download an image
+        function downloadImage(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const blobUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(blobUrl);
+                    
+                    showStatus(`Downloaded: ${filename}`, 'success');
+                })
+                .catch(error => {
+                    console.error('Error downloading image:', error);
+                    showStatus(`Error downloading: ${filename}`, 'error');
+                });
+        }
+
+        // Download all images
+        function downloadAllImages() {
+            showStatus('Starting download of all images... Please wait.', 'success');
+            
+            let count = 0;
+            const total = Object.keys(resources).length;
+            
+            for (const [key, resource] of Object.entries(resources)) {
+                setTimeout(() => {
+                    downloadImage(resource.image, `${key}.${getExtension(resource.image)}`);
+                    count++;
+                    
+                    if (count === total) {
+                        showStatus(`All ${total} images downloaded successfully!`, 'success');
+                    }
+                }, count * 500); // Stagger downloads to avoid browser limitations
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createResourceItems();
+            
+            document.getElementById('downloadAll').addEventListener('click', downloadAllImages);
+        });
+    </script>
+</body>
+</html> 

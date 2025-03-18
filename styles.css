@@ -360,6 +360,16 @@ body {
     font-weight: 500;
 }
 
+.learn-topics span a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.learn-topics span a:hover {
+    color: var(--secondary-color);
+}
+
 .learn-link {
     display: inline-block;
     margin-top: 1rem;
