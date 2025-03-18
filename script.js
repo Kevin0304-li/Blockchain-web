@@ -484,4 +484,53 @@ async function showChart(coinId, coinName) {
         chartCanvas.style.display = 'none';
         chartCanvas.parentNode.appendChild(errorDiv);
     }
-} 
+}
+
+// Resources toggle functionality
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, checking for resource toggles');
+    
+    // Initialize resource toggles if they exist
+    const resourceToggles = document.querySelectorAll('.resources-toggle');
+    console.log('Found resource toggles:', resourceToggles.length);
+    
+    if (resourceToggles.length > 0) {
+        resourceToggles.forEach(toggle => {
+            // Get the content section that follows this toggle
+            const content = toggle.nextElementSibling;
+            
+            // Initialize all content sections to be hidden
+            if (content && content.classList.contains('resources-content')) {
+                content.style.display = 'none';
+                console.log('Initialized a resource toggle section to hidden');
+            }
+            
+            // Add click event listener
+            toggle.addEventListener('click', function() {
+                console.log('Toggle clicked');
+                
+                // Get the content section and icon
+                const content = this.nextElementSibling;
+                const toggleIcon = this.querySelector('.toggle-icon i');
+                
+                if (!content || !toggleIcon) {
+                    console.error('Missing content or toggle icon element');
+                    return;
+                }
+                
+                // Toggle visibility
+                if (content.style.display === 'block') {
+                    console.log('Hiding content');
+                    content.style.display = 'none';
+                    toggleIcon.classList.remove('fa-chevron-up');
+                    toggleIcon.classList.add('fa-chevron-down');
+                } else {
+                    console.log('Showing content');
+                    content.style.display = 'block';
+                    toggleIcon.classList.remove('fa-chevron-down');
+                    toggleIcon.classList.add('fa-chevron-up');
+                }
+            });
+        });
+    }
+}); 
