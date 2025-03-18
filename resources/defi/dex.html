@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentralized Exchanges | BlockChain Hub</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../resources.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            <span>BlockChain Hub</span>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html#home">Home</a>
+            <a href="../../index.html#explore">Explore</a>
+            <a href="../../index.html#market">Market</a>
+            <a href="../../index.html#learn">Learn</a>
+            <a href="../../index.html#connect">Connect</a>
+        </div>
+        <div class="wallet-connect">
+            <button class="connect-btn">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <div class="resource-header">
+        <h1>Decentralized Exchanges (DEXs)</h1>
+        <p>Understanding peer-to-peer trading platforms on the blockchain</p>
+    </div>
+
+    <div class="resource-container">
+        <aside class="resource-sidebar">
+            <h3>Learning Path</h3>
+            <ul>
+                <li><a href="index.html">DeFi Overview</a></li>
+                <li><a href="yield-farming.html">Yield Farming</a></li>
+                <li class="active"><a href="dex.html">Decentralized Exchanges</a></li>
+                <li><a href="lending.html">DeFi Lending</a></li>
+            </ul>
+            <h3>Related Topics</h3>
+            <ul>
+                <li><a href="../getting-started/index.html">Getting Started</a></li>
+                <li><a href="../smart-contracts/index.html">Smart Contracts</a></li>
+            </ul>
+        </aside>
+
+        <main class="resource-content">
+            <article class="learning-content">
+                <section>
+                    <h2>What are Decentralized Exchanges?</h2>
+                    <p>
+                        Decentralized exchanges (DEXs) are blockchain-based platforms that allow users to trade cryptocurrencies directly with each other, 
+                        without the need for a centralized intermediary. Unlike traditional exchanges that maintain order books and custody of funds, 
+                        DEXs facilitate peer-to-peer trading through smart contracts.
+                    </p>
+                    
+                    <div class="content-section">
+                        <i class="fas fa-exchange-alt fa-3x" style="color: var(--secondary-color); margin: 2rem 0;"></i>
+                        <p>
+                            DEXs represent one of the core innovations of the DeFi movement, embodying the principles of trustlessness, 
+                            transparency, and permissionless access. They've grown from niche platforms to handling billions in daily trading volume, 
+                            revolutionizing how cryptocurrencies are exchanged.
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Types of Decentralized Exchanges</h2>
+                    
+                    <h3>Automated Market Makers (AMMs)</h3>
+                    <p>
+                        AMMs are the most common type of DEXs, replacing the traditional order book model with liquidity pools. 
+                        These pools contain pairs of tokens, and prices are determined by a mathematical formula—typically a constant product formula (x*y=k).
+                    </p>
+                    
+                    <div class="blockchain-diagram" style="flex-direction: column; align-items: flex-start;">
+                        <h4>How AMMs Work:</h4>
+                        <ol>
+                            <li><strong>Liquidity Provision:</strong> Users deposit pairs of tokens into pools</li>
+                            <li><strong>Price Determination:</strong> Token prices are set by the ratio of assets in the pool</li>
+                            <li><strong>Swapping:</strong> Traders exchange tokens directly with the pool, not with other users</li>
+                            <li><strong>Fee Distribution:</strong> Trading fees are distributed to liquidity providers</li>
+                        </ol>
+                    </div>
+                    
+                    <h3>Order Book DEXs</h3>
+                    <p>
+                        These DEXs maintain an order book similar to centralized exchanges, but orders are matched and executed on-chain. 
+                        They often offer more sophisticated trading options but can be limited by blockchain throughput and gas costs.
+                    </p>
+                    
+                    <h3>DEX Aggregators</h3>
+                    <p>
+                        Aggregators source liquidity from multiple DEXs to provide users with the best possible rates. 
+                        They split trades across different platforms to minimize slippage and maximize returns.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Key DEX Platforms</h2>
+                    
+                    <h3>Uniswap</h3>
+                    <p>
+                        Uniswap pioneered the AMM model with its simple constant product formula (x*y=k). Now in its third version, 
+                        it introduced concentrated liquidity, allowing providers to specify price ranges for their capital. This innovation 
+                        significantly improved capital efficiency and reduced slippage for traders.
+                    </p>
+                    
+                    <h3>Curve Finance</h3>
+                    <p>
+                        Curve specializes in stablecoin and similar-asset swaps, using a different formula optimized for assets that should trade 
+                        at near-parity. This specialized approach allows for minimal slippage and low fees when trading between stablecoins or wrapped versions of the same asset.
+                    </p>
+                    
+                    <h3>dYdX</h3>
+                    <p>
+                        dYdX represents the order book model of DEXs, focusing on derivatives trading including perpetual contracts. 
+                        It uses a hybrid approach with off-chain order books and on-chain settlement to balance performance with security.
+                    </p>
+                    
+                    <h3>1inch</h3>
+                    <p>
+                        As a leading DEX aggregator, 1inch splits user trades across multiple liquidity sources to find the best rates. 
+                        It uses advanced algorithms to optimize routing and minimize transaction costs.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Technical Foundations of DEXs</h2>
+                    
+                    <h3>Smart Contract Architecture</h3>
+                    <p>
+                        DEXs rely on smart contracts to handle all aspects of trading:
+                    </p>
+                    <ul>
+                        <li><strong>Router Contracts:</strong> Direct trades to appropriate pools and handle token swaps</li>
+                        <li><strong>Pool Contracts:</strong> Maintain liquidity and execute the core swap logic</li>
+                        <li><strong>Factory Contracts:</strong> Create and register new liquidity pools</li>
+                        <li><strong>Periphery Contracts:</strong> Handle additional features like limit orders or flash swaps</li>
+                    </ul>
+                    
+                    <h3>Price Impact and Slippage</h3>
+                    <p>
+                        When trading on AMMs, larger trades cause greater price movement due to the constant product formula. 
+                        This "price impact" increases the effective cost of the trade. Slippage refers to the difference between the expected 
+                        price and the actual execution price, affected by both price impact and external factors like concurrent transactions.
+                    </p>
+                    
+                    <h3>Impermanent Loss</h3>
+                    <p>
+                        Liquidity providers in AMMs face the risk of impermanent loss—the opportunity cost compared to simply holding the assets. 
+                        It occurs when the price ratio of the pooled assets changes from the time of deposit. The more volatile the asset pair and 
+                        the larger the price change, the greater the impermanent loss.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Advantages and Challenges of DEXs</h2>
+                    
+                    <h3>Advantages</h3>
+                    <ul>
+                        <li><strong>Self-Custody:</strong> Users maintain control of their funds until the moment of trade</li>
+                        <li><strong>Permissionless:</strong> Anyone can access DEXs without approval or identity verification</li>
+                        <li><strong>Censorship Resistance:</strong> No centralized authority can block transactions</li>
+                        <li><strong>Transparency:</strong> All transactions are visible on the blockchain</li>
+                        <li><strong>Broader Token Access:</strong> New or niche tokens can be listed without approval processes</li>
+                    </ul>
+                    
+                    <h3>Challenges</h3>
+                    <ul>
+                        <li><strong>Gas Costs:</strong> On networks like Ethereum, transaction fees can be prohibitive for smaller trades</li>
+                        <li><strong>Front-Running:</strong> Miners or other users can exploit pending transactions for profit</li>
+                        <li><strong>Limited Order Types:</strong> Many DEXs lack sophisticated trading options</li>
+                        <li><strong>Smart Contract Risks:</strong> Vulnerabilities in code can lead to fund loss</li>
+                        <li><strong>Liquidity Fragmentation:</strong> Trading volume split across many platforms can reduce efficiency</li>
+                    </ul>
+                </section>
+
+                <section class="external-resources">
+                    <div class="resources-toggle">
+                        <h4><i class="fas fa-globe"></i>External Learning Resources</h4>
+                        <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="resources-content">
+                        <div class="resources-list">
+                            <a href="https://docs.uniswap.org/" target="_blank" rel="noopener noreferrer" class="resource-link documentation">
+                                <i class="fas fa-book"></i>
+                                <div class="resource-link-content">
+                                    <h5>Uniswap Documentation</h5>
+                                    <p>Technical documentation for the leading DEX protocol</p>
+                                </div>
+                            </a>
+                            <a href="https://github.com/Uniswap/v3-core" target="_blank" rel="noopener noreferrer" class="resource-link github">
+                                <i class="fab fa-github"></i>
+                                <div class="resource-link-content">
+                                    <h5>Uniswap v3 Core</h5>
+                                    <p>GitHub repository for Uniswap's core smart contracts</p>
+                                </div>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=1PbZMudPP5E" target="_blank" rel="noopener noreferrer" class="resource-link youtube">
+                                <i class="fab fa-youtube"></i>
+                                <div class="resource-link-content">
+                                    <h5>How Automated Market Makers Work</h5>
+                                    <p>Finematics' visual explanation of AMM mechanics</p>
+                                </div>
+                            </a>
+                            <a href="https://curve.fi/whitepaper" target="_blank" rel="noopener noreferrer" class="resource-link documentation">
+                                <i class="fas fa-file-alt"></i>
+                                <div class="resource-link-content">
+                                    <h5>Curve Finance Whitepaper</h5>
+                                    <p>Technical details of Curve's stablecoin exchange mechanism</p>
+                                </div>
+                            </a>
+                            <a href="https://docs.1inch.io/" target="_blank" rel="noopener noreferrer" class="resource-link documentation">
+                                <i class="fas fa-random"></i>
+                                <div class="resource-link-content">
+                                    <h5>1inch Documentation</h5>
+                                    <p>Technical overview of DEX aggregation protocols</p>
+                                </div>
+                            </a>
+                            <a href="https://academy.binance.com/en/articles/what-is-a-decentralized-exchange-dex" target="_blank" rel="noopener noreferrer" class="resource-link course">
+                                <i class="fas fa-graduation-cap"></i>
+                                <div class="resource-link-content">
+                                    <h5>Binance Academy: DEX Guide</h5>
+                                    <p>Comprehensive introduction to decentralized exchanges</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="navigation-buttons">
+                    <a href="yield-farming.html" class="prev-button"><i class="fas fa-arrow-left"></i> Back to Yield Farming</a>
+                    <a href="lending.html" class="next-button">Next: DeFi Lending <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BlockChain Hub</h4>
+                <p>Your gateway to the future of finance</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="../../index.html#home">Home</a>
+                <a href="../../index.html#explore">Explore</a>
+                <a href="../../index.html#market">Market</a>
+                <a href="../../index.html#learn">Learn</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">API</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BlockChain Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../../script.js"></script>
+</body>
+</html> 

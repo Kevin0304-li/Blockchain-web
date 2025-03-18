@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust for Blockchain | BlockChain Hub</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../resources.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            <span>BlockChain Hub</span>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html#home">Home</a>
+            <a href="../../index.html#explore">Explore</a>
+            <a href="../../index.html#market">Market</a>
+            <a href="../../index.html#learn">Learn</a>
+            <a href="../../index.html#connect">Connect</a>
+        </div>
+        <div class="wallet-connect">
+            <button class="connect-btn">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <div class="resource-header">
+        <h1>Rust for Blockchain</h1>
+        <p>Harness the power and safety of Rust for blockchain development</p>
+    </div>
+
+    <div class="resource-container">
+        <aside class="resource-sidebar">
+            <h3>Learning Path</h3>
+            <ul>
+                <li><a href="index.html">Smart Contracts</a></li>
+                <li><a href="solidity.html">Solidity Programming</a></li>
+                <li class="active"><a href="rust.html">Rust for Blockchain</a></li>
+                <li><a href="security.html">Smart Contract Security</a></li>
+            </ul>
+            <h3>Related Topics</h3>
+            <ul>
+                <li><a href="../getting-started/index.html">Getting Started</a></li>
+                <li><a href="../defi/index.html">DeFi Ecosystem</a></li>
+            </ul>
+        </aside>
+
+        <main class="resource-content">
+            <article class="learning-content">
+                <section>
+                    <h2>Introduction to Rust in Blockchain</h2>
+                    <p>
+                        Rust is a systems programming language focused on safety, speed, and concurrency. 
+                        Its memory safety guarantees and zero-cost abstractions make it an ideal choice for blockchain development, 
+                        where security and performance are paramount concerns.
+                    </p>
+                    
+                    <div class="content-section">
+                        <i class="fas fa-cog fa-3x" style="color: var(--secondary-color); margin: 2rem 0;"></i>
+                        <p>
+                            In the blockchain ecosystem, Rust has been adopted by major platforms like Solana, Polkadot, and Near Protocol 
+                            for developing high-performance smart contracts and blockchain infrastructure. Its strong type system and ownership model 
+                            help prevent common programming errors that could lead to vulnerabilities in blockchain applications.
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Rust Fundamentals for Blockchain</h2>
+                    
+                    <h3>Basic Structure of a Rust Program</h3>
+                    <div class="code-block" style="background: #2d2d2d; color: #f8f8f2; padding: 1.5rem; border-radius: 8px; overflow-x: auto; margin: 1.5rem 0;">
+<pre><code>// A simple Rust smart contract structure
+#[program]
+pub mod basic_program {
+    use super::*;
+    
+    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count = 0;
+        Ok(())
+    }
+    
+    pub fn increment(ctx: Context<Increment>) -> Result<()> {
+        let counter = &mut ctx.accounts.counter;
+        counter.count += 1;
+        Ok(())
+    }
+}
+
+#[derive(Accounts)]
+pub struct Initialize<'info> {
+    #[account(init, payer = user, space = 8 + 8)]
+    pub counter: Account<'info, Counter>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct Increment<'info> {
+    #[account(mut)]
+    pub counter: Account<'info, Counter>,
+}
+
+#[account]
+pub struct Counter {
+    pub count: u64,
+}</code></pre>
+                    </div>
+
+                    <h3>Key Rust Features for Blockchain Development</h3>
+                    <ul>
+                        <li><strong>Ownership and Borrowing:</strong> Memory safety without garbage collection</li>
+                        <li><strong>Type Safety:</strong> Strong typing prevents entire classes of bugs</li>
+                        <li><strong>Zero-Cost Abstractions:</strong> High-level features with no runtime overhead</li>
+                        <li><strong>Concurrency:</strong> Thread safety guarantees for parallel processing</li>
+                        <li><strong>Pattern Matching:</strong> Powerful constructs for handling complex data</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Blockchain Platforms Using Rust</h2>
+                    
+                    <h3>Solana</h3>
+                    <p>
+                        Solana is a high-performance blockchain that uses Rust for its smart contracts (called programs). 
+                        Its focus on throughput and low transaction costs makes it popular for DeFi and NFT applications. 
+                        Solana's programming model differs from Ethereum, requiring developers to think in terms of accounts and instructions.
+                    </p>
+                    
+                    <h3>Polkadot and Substrate</h3>
+                    <p>
+                        Polkadot uses Substrate, a framework built in Rust, for creating customizable blockchains. 
+                        It allows developers to build specialized blockchains (parachains) that can interoperate within the Polkadot ecosystem. 
+                        Substrate provides a modular architecture where functionality can be added or removed as needed.
+                    </p>
+                    
+                    <h3>Near Protocol</h3>
+                    <p>
+                        Near Protocol is a sharded, developer-friendly blockchain that supports Rust for smart contract development. 
+                        It aims to bring blockchain to the mainstream with its scalable architecture and focus on usability. 
+                        Near's contract model provides a more familiar environment for developers coming from web development.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Building Smart Contracts in Rust</h2>
+                    
+                    <h3>Anchor Framework (Solana)</h3>
+                    <p>
+                        Anchor is the leading framework for Solana development, providing a simpler programming model 
+                        that resembles writing web applications. It handles much of the boilerplate code and adds safety 
+                        checks through its macros and abstractions.
+                    </p>
+                    
+                    <h3>Rust Development Environment</h3>
+                    <p>
+                        Setting up for Rust blockchain development typically involves:
+                    </p>
+                    <ol>
+                        <li>Installing Rust and Cargo (Rust's package manager)</li>
+                        <li>Setting up blockchain-specific SDKs and tools</li>
+                        <li>Learning to use testing frameworks for smart contract validation</li>
+                        <li>Understanding deployment workflows for the target blockchain</li>
+                    </ol>
+                </section>
+
+                <section class="external-resources">
+                    <div class="resources-toggle">
+                        <h4><i class="fas fa-globe"></i>External Learning Resources</h4>
+                        <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
+                    </div>
+                    <div class="resources-content">
+                        <div class="resources-list">
+                            <a href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener noreferrer" class="resource-link documentation">
+                                <i class="fas fa-book"></i>
+                                <div class="resource-link-content">
+                                    <h5>The Rust Programming Language</h5>
+                                    <p>Official Rust language book - the best starting point</p>
+                                </div>
+                            </a>
+                            <a href="https://github.com/rust-lang/rustlings" target="_blank" rel="noopener noreferrer" class="resource-link github">
+                                <i class="fab fa-github"></i>
+                                <div class="resource-link-content">
+                                    <h5>Rustlings</h5>
+                                    <p>Small exercises to get you used to reading and writing Rust code</p>
+                                </div>
+                            </a>
+                            <a href="https://docs.solana.com/developing/on-chain-programs/developing-rust" target="_blank" rel="noopener noreferrer" class="resource-link documentation">
+                                <i class="fas fa-sun"></i>
+                                <div class="resource-link-content">
+                                    <h5>Solana Rust Documentation</h5>
+                                    <p>Official guide for developing Rust programs on Solana</p>
+                                </div>
+                            </a>
+                            <a href="https://www.youtube.com/watch?v=uGrxQDfAumo" target="_blank" rel="noopener noreferrer" class="resource-link youtube">
+                                <i class="fab fa-youtube"></i>
+                                <div class="resource-link-content">
+                                    <h5>Solana Bootcamp</h5>
+                                    <p>Comprehensive introduction to Solana development in Rust</p>
+                                </div>
+                            </a>
+                            <a href="https://substrate.io/developers/" target="_blank" rel="noopener noreferrer" class="resource-link documentation">
+                                <i class="fas fa-cubes"></i>
+                                <div class="resource-link-content">
+                                    <h5>Substrate Developer Hub</h5>
+                                    <p>Resources for building with Polkadot's Substrate framework</p>
+                                </div>
+                            </a>
+                            <a href="https://github.com/coral-xyz/anchor" target="_blank" rel="noopener noreferrer" class="resource-link github">
+                                <i class="fab fa-github"></i>
+                                <div class="resource-link-content">
+                                    <h5>Anchor Framework</h5>
+                                    <p>Framework for Solana's Sealevel runtime providing several conveniences</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="navigation-buttons">
+                    <a href="solidity.html" class="prev-button"><i class="fas fa-arrow-left"></i> Back to Solidity Programming</a>
+                    <a href="security.html" class="next-button">Next: Smart Contract Security <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BlockChain Hub</h4>
+                <p>Your gateway to the future of finance</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="../../index.html#home">Home</a>
+                <a href="../../index.html#explore">Explore</a>
+                <a href="../../index.html#market">Market</a>
+                <a href="../../index.html#learn">Learn</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">API</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BlockChain Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../../script.js"></script>
+</body>
+</html> 

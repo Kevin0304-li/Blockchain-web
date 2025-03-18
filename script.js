@@ -246,13 +246,6 @@ async function showChart(coinId, coinName) {
             priceChart.destroy();
         }
         
-        // Determine chart color based on price trend
-        const startPrice = prices[0];
-        const endPrice = prices[prices.length - 1];
-        const priceChange = endPrice - startPrice;
-        const chartColor = priceChange >= 0 ? 'rgba(46, 213, 115, 1)' : 'rgba(235, 77, 75, 1)';
-        const chartBgColor = priceChange >= 0 ? 'rgba(46, 213, 115, 0.1)' : 'rgba(235, 77, 75, 0.1)';
-        
         // Calculate min and max for better Y-axis scaling
         const minPrice = Math.min(...prices) * 0.95; // Add 5% padding below
         const maxPrice = Math.max(...prices) * 1.05; // Add 5% padding above
@@ -265,8 +258,20 @@ async function showChart(coinId, coinName) {
         };
         const symbol = coinSymbols[coinId] || '';
         
+        // Set up the dark background
+        chartModal.style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+        const modalContent = document.querySelector('.chart-modal-content');
+        modalContent.style.backgroundColor = '#0e1217';
+        modalContent.style.color = '#ffffff';
+        
         // Create chart with adjusted maintainAspectRatio
         const ctx = chartCanvas.getContext('2d');
+        
+        // Create gradient for DeFiLlama style
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(56, 97, 251, 0.8)');
+        gradient.addColorStop(1, 'rgba(56, 97, 251, 0.1)');
+        
         priceChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -274,29 +279,24 @@ async function showChart(coinId, coinName) {
                 datasets: [{
                     label: `${coinName} (${symbol}) Price`,
                     data: prices,
-                    borderColor: chartColor,
-                    backgroundColor: chartBgColor,
-                    borderWidth: 3,
-                    pointRadius: 4,
-                    pointHoverRadius: 7,
-                    pointBackgroundColor: chartColor,
-                    pointHoverBackgroundColor: '#FFFFFF',
-                    pointHoverBorderWidth: 2,
-                    pointHoverBorderColor: chartColor,
+                    borderColor: 'rgb(56, 97, 251)',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    pointRadius: 0,
                     fill: true,
-                    tension: 0.2
+                    tension: 0.4
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // This is important to ensure chart fits container
+                maintainAspectRatio: false,
                 interaction: {
                     mode: 'index',
                     intersect: false,
                 },
                 plugins: {
                     tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        backgroundColor: 'rgba(14, 18, 23, 0.9)',
                         titleFont: {
                             size: 14,
                             weight: 'bold'
@@ -305,6 +305,8 @@ async function showChart(coinId, coinName) {
                             size: 13
                         },
                         padding: 10,
+                        borderColor: 'rgba(56, 97, 251, 0.3)',
+                        borderWidth: 1,
                         cornerRadius: 8,
                         callbacks: {
                             title: function(tooltipItems) {
@@ -326,33 +328,12 @@ async function showChart(coinId, coinName) {
                                     });
                                 }
                                 
-                                return `Price: $${formattedValue}`;
-                            },
-                            afterLabel: function(context) {
-                                // Show percent change from start if available
-                                if (context.dataIndex > 0) {
-                                    const currentValue = context.parsed.y;
-                                    const firstValue = prices[0];
-                                    const percentChange = ((currentValue - firstValue) / firstValue) * 100;
-                                    const sign = percentChange >= 0 ? '+' : '';
-                                    return `${sign}${percentChange.toFixed(2)}% from start`;
-                                }
-                                return '';
+                                return `$${formattedValue}`;
                             }
                         }
                     },
                     legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            padding: 15,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
+                        display: false
                     },
                     title: {
                         display: false
@@ -361,24 +342,22 @@ async function showChart(coinId, coinName) {
                 scales: {
                     x: {
                         grid: {
-                            display: true,
-                            color: 'rgba(0, 0, 0, 0.05)'
+                            color: 'rgba(255, 255, 255, 0.05)'
                         },
                         ticks: {
                             font: {
                                 size: 11
                             },
-                            maxRotation: 45,
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            maxRotation: 0,
                             minRotation: 0,
                             autoSkip: true,
-                            maxTicksLimit: 12
+                            maxTicksLimit: 8
                         }
                     },
                     y: {
-                        min: minPrice,
-                        max: maxPrice,
                         grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
+                            color: 'rgba(255, 255, 255, 0.05)'
                         },
                         border: {
                             dash: [5, 5]
@@ -387,20 +366,15 @@ async function showChart(coinId, coinName) {
                             font: {
                                 size: 11
                             },
+                            color: 'rgba(255, 255, 255, 0.5)',
                             padding: 8,
                             callback: function(value) {
-                                // Format price labels based on magnitude
-                                if (value < 1) {
-                                    return '$' + value.toFixed(4);
-                                } else if (value < 10) {
-                                    return '$' + value.toFixed(2);
-                                } else if (value < 1000) {
-                                    return '$' + value.toFixed(0);
-                                } else if (value < 1000000) {
-                                    return '$' + (value / 1000).toFixed(1) + 'K';
-                                } else {
-                                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                                if (value >= 1000000000) {
+                                    return (value / 1000000000).toFixed(0) + 'b USD';
+                                } else if (value >= 1000000) {
+                                    return (value / 1000000).toFixed(0) + 'm USD';
                                 }
+                                return value + ' USD';
                             }
                         }
                     }
@@ -410,7 +384,7 @@ async function showChart(coinId, coinName) {
                     intersect: false
                 },
                 animation: {
-                    duration: 800, // Slightly faster animation
+                    duration: 800,
                     easing: 'easeOutQuart'
                 },
                 elements: {
@@ -427,9 +401,12 @@ async function showChart(coinId, coinName) {
             }
         });
         
-        // Create compact price summary
+        // Create compact price summary with DeFiLlama styled colors
         const chartInfoEl = document.createElement('div');
         chartInfoEl.className = 'chart-price-info';
+        chartInfoEl.style.backgroundColor = '#0e1217';
+        chartInfoEl.style.color = '#ffffff';
+        chartInfoEl.style.borderTop = '1px solid rgba(255, 255, 255, 0.1)';
         
         // Format min/max prices
         const formatPrice = (price) => {
@@ -472,9 +449,11 @@ async function showChart(coinId, coinName) {
         const modalTitle = document.querySelector('.chart-modal-title');
         modalTitle.textContent = `Error loading chart data`;
         
-        // Show more compact error message
+        // Show more compact error message with DeFiLlama style
         const errorDiv = document.createElement('div');
         errorDiv.className = 'chart-error';
+        errorDiv.style.backgroundColor = '#0e1217';
+        errorDiv.style.color = '#ffffff';
         errorDiv.innerHTML = `
             <p>Sorry, we couldn't load the price data.</p>
             <p>Please try again later.</p>
@@ -486,51 +465,31 @@ async function showChart(coinId, coinName) {
     }
 }
 
-// Resources toggle functionality
+// Resources toggle functionality - simplified version
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, checking for resource toggles');
-    
-    // Initialize resource toggles if they exist
+    // Add the toggle functionality directly to each toggle element
     const resourceToggles = document.querySelectorAll('.resources-toggle');
-    console.log('Found resource toggles:', resourceToggles.length);
     
     if (resourceToggles.length > 0) {
         resourceToggles.forEach(toggle => {
-            // Get the content section that follows this toggle
             const content = toggle.nextElementSibling;
+            const icon = toggle.querySelector('.toggle-icon i');
             
-            // Initialize all content sections to be hidden
-            if (content && content.classList.contains('resources-content')) {
+            // Initialize all to hidden
+            if (content) {
                 content.style.display = 'none';
-                console.log('Initialized a resource toggle section to hidden');
             }
             
-            // Add click event listener
-            toggle.addEventListener('click', function() {
-                console.log('Toggle clicked');
-                
-                // Get the content section and icon
-                const content = this.nextElementSibling;
-                const toggleIcon = this.querySelector('.toggle-icon i');
-                
-                if (!content || !toggleIcon) {
-                    console.error('Missing content or toggle icon element');
-                    return;
-                }
-                
-                // Toggle visibility
+            // Add click handler
+            toggle.onclick = function() {
                 if (content.style.display === 'block') {
-                    console.log('Hiding content');
                     content.style.display = 'none';
-                    toggleIcon.classList.remove('fa-chevron-up');
-                    toggleIcon.classList.add('fa-chevron-down');
+                    icon.className = 'fas fa-chevron-down';
                 } else {
-                    console.log('Showing content');
                     content.style.display = 'block';
-                    toggleIcon.classList.remove('fa-chevron-down');
-                    toggleIcon.classList.add('fa-chevron-up');
+                    icon.className = 'fas fa-chevron-up';
                 }
-            });
+            };
         });
     }
 }); 
