@@ -131,4 +131,357 @@ document.querySelectorAll('.feature-card, .market-card, .learn-card').forEach(ca
     card.style.transform = 'translateY(20px)';
     card.style.transition = 'all 0.5s ease-out';
     observer.observe(card);
-}); 
+});
+
+// Chart Modal Functionality
+let chartModal;
+let chartModalClose;
+let chartCanvas;
+let priceChart;
+
+// Create the chart modal when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Create modal elements
+    chartModal = document.createElement('div');
+    chartModal.className = 'chart-modal';
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'chart-modal-content';
+    
+    const modalHeader = document.createElement('div');
+    modalHeader.className = 'chart-modal-header';
+    
+    const modalTitle = document.createElement('h2');
+    modalTitle.className = 'chart-modal-title';
+    modalTitle.textContent = 'Price Chart';
+    
+    chartModalClose = document.createElement('span');
+    chartModalClose.className = 'chart-modal-close';
+    chartModalClose.innerHTML = '&times;';
+    
+    chartCanvas = document.createElement('canvas');
+    chartCanvas.id = 'price-chart';
+    
+    // Assemble modal structure
+    modalHeader.appendChild(modalTitle);
+    modalHeader.appendChild(chartModalClose);
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(chartCanvas);
+    chartModal.appendChild(modalContent);
+    
+    // Add to document
+    document.body.appendChild(chartModal);
+    
+    // Add event listeners
+    chartModalClose.addEventListener('click', () => {
+        chartModal.style.display = 'none';
+        if (priceChart) {
+            priceChart.destroy();
+        }
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === chartModal) {
+            chartModal.style.display = 'none';
+            if (priceChart) {
+                priceChart.destroy();
+            }
+        }
+    });
+    
+    // Add event listeners to "View Chart" links
+    const chartLinks = document.querySelectorAll('.chart-link');
+    chartLinks.forEach((link, index) => {
+        link.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            const coins = ['bitcoin', 'ethereum', 'cardano'];
+            const coinName = coins[index];
+            const coinDisplayNames = ['Bitcoin', 'Ethereum', 'Cardano'];
+            
+            showChart(coinName, coinDisplayNames[index]);
+        });
+    });
+});
+
+// Function to fetch historical price data and display chart
+async function showChart(coinId, coinName) {
+    try {
+        // Clear any previous chart elements
+        while (chartCanvas.nextSibling) {
+            if (chartCanvas.nextSibling.classList && 
+                (chartCanvas.nextSibling.classList.contains('chart-price-info') || 
+                chartCanvas.nextSibling.classList.contains('chart-error'))) {
+                chartCanvas.nextSibling.remove();
+            } else {
+                break;
+            }
+        }
+        
+        // Reset canvas display in case it was hidden
+        chartCanvas.style.display = 'block';
+        
+        // Show loading state
+        chartModal.style.display = 'block';
+        const modalTitle = document.querySelector('.chart-modal-title');
+        modalTitle.textContent = `${coinName} Price Chart (Loading...)`;
+
+        // Fetch historical price data
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=30&interval=daily`);
+        const data = await response.json();
+        
+        // Update modal title
+        modalTitle.textContent = `${coinName} Price Chart (Last 30 Days)`;
+        
+        // Format data for chart
+        const labels = data.prices.map(price => {
+            const date = new Date(price[0]);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+        
+        const prices = data.prices.map(price => price[1]);
+        
+        // Create or update chart
+        if (priceChart) {
+            priceChart.destroy();
+        }
+        
+        // Determine chart color based on price trend
+        const startPrice = prices[0];
+        const endPrice = prices[prices.length - 1];
+        const priceChange = endPrice - startPrice;
+        const chartColor = priceChange >= 0 ? 'rgba(46, 213, 115, 1)' : 'rgba(235, 77, 75, 1)';
+        const chartBgColor = priceChange >= 0 ? 'rgba(46, 213, 115, 0.1)' : 'rgba(235, 77, 75, 0.1)';
+        
+        // Calculate min and max for better Y-axis scaling
+        const minPrice = Math.min(...prices) * 0.95; // Add 5% padding below
+        const maxPrice = Math.max(...prices) * 1.05; // Add 5% padding above
+        
+        // Get coin symbol for better labeling
+        const coinSymbols = {
+            'bitcoin': 'BTC',
+            'ethereum': 'ETH',
+            'cardano': 'ADA'
+        };
+        const symbol = coinSymbols[coinId] || '';
+        
+        // Create chart with adjusted maintainAspectRatio
+        const ctx = chartCanvas.getContext('2d');
+        priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `${coinName} (${symbol}) Price`,
+                    data: prices,
+                    borderColor: chartColor,
+                    backgroundColor: chartBgColor,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: chartColor,
+                    pointHoverBackgroundColor: '#FFFFFF',
+                    pointHoverBorderWidth: 2,
+                    pointHoverBorderColor: chartColor,
+                    fill: true,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // This is important to ensure chart fits container
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 10,
+                        cornerRadius: 8,
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                return tooltipItems[0].label;
+                            },
+                            label: function(context) {
+                                const value = context.parsed.y;
+                                let formattedValue;
+                                
+                                // Format based on price magnitude
+                                if (value < 1) {
+                                    formattedValue = value.toFixed(4);
+                                } else if (value < 1000) {
+                                    formattedValue = value.toFixed(2);
+                                } else {
+                                    formattedValue = value.toLocaleString('en-US', { 
+                                        minimumFractionDigits: 2, 
+                                        maximumFractionDigits: 2 
+                                    });
+                                }
+                                
+                                return `Price: $${formattedValue}`;
+                            },
+                            afterLabel: function(context) {
+                                // Show percent change from start if available
+                                if (context.dataIndex > 0) {
+                                    const currentValue = context.parsed.y;
+                                    const firstValue = prices[0];
+                                    const percentChange = ((currentValue - firstValue) / firstValue) * 100;
+                                    const sign = percentChange >= 0 ? '+' : '';
+                                    return `${sign}${percentChange.toFixed(2)}% from start`;
+                                }
+                                return '';
+                            }
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            },
+                            maxRotation: 45,
+                            minRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 12
+                        }
+                    },
+                    y: {
+                        min: minPrice,
+                        max: maxPrice,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        border: {
+                            dash: [5, 5]
+                        },
+                        ticks: {
+                            font: {
+                                size: 11
+                            },
+                            padding: 8,
+                            callback: function(value) {
+                                // Format price labels based on magnitude
+                                if (value < 1) {
+                                    return '$' + value.toFixed(4);
+                                } else if (value < 10) {
+                                    return '$' + value.toFixed(2);
+                                } else if (value < 1000) {
+                                    return '$' + value.toFixed(0);
+                                } else if (value < 1000000) {
+                                    return '$' + (value / 1000).toFixed(1) + 'K';
+                                } else {
+                                    return '$' + (value / 1000000).toFixed(1) + 'M';
+                                }
+                            }
+                        }
+                    }
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: false
+                },
+                animation: {
+                    duration: 800, // Slightly faster animation
+                    easing: 'easeOutQuart'
+                },
+                elements: {
+                    point: {
+                        hoverRadius: 7,
+                        hitRadius: 30
+                    }
+                },
+                layout: {
+                    padding: { 
+                        bottom: 10
+                    }
+                }
+            }
+        });
+        
+        // Create compact price summary
+        const chartInfoEl = document.createElement('div');
+        chartInfoEl.className = 'chart-price-info';
+        
+        // Format min/max prices
+        const formatPrice = (price) => {
+            if (price < 1) return '$' + price.toFixed(4);
+            if (price < 1000) return '$' + price.toFixed(2);
+            return '$' + price.toLocaleString('en-US', {maximumFractionDigits: 2});
+        };
+        
+        const minPriceFormatted = formatPrice(Math.min(...prices));
+        const maxPriceFormatted = formatPrice(Math.max(...prices));
+        const changePercent = ((endPrice - startPrice) / startPrice * 100).toFixed(2);
+        const changeClass = priceChange >= 0 ? 'positive' : 'negative';
+        const changeSign = priceChange >= 0 ? '+' : '';
+        
+        chartInfoEl.innerHTML = `
+            <div class="chart-price-summary">
+                <div class="chart-price-range">
+                    <span>Range:</span> 
+                    <span class="min-price">${minPriceFormatted}</span> - 
+                    <span class="max-price">${maxPriceFormatted}</span>
+                </div>
+                <div class="chart-price-change ${changeClass}">
+                    <span>30d:</span> 
+                    <span>${changeSign}${changePercent}%</span>
+                </div>
+            </div>
+        `;
+        
+        // Remove any existing chart info
+        const existingInfo = document.querySelector('.chart-price-info');
+        if (existingInfo) {
+            existingInfo.remove();
+        }
+        
+        // Add new info after the canvas
+        chartCanvas.parentNode.insertBefore(chartInfoEl, chartCanvas.nextSibling);
+        
+    } catch (error) {
+        console.error('Error fetching chart data:', error);
+        const modalTitle = document.querySelector('.chart-modal-title');
+        modalTitle.textContent = `Error loading chart data`;
+        
+        // Show more compact error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'chart-error';
+        errorDiv.innerHTML = `
+            <p>Sorry, we couldn't load the price data.</p>
+            <p>Please try again later.</p>
+        `;
+        
+        // Replace canvas with error message
+        chartCanvas.style.display = 'none';
+        chartCanvas.parentNode.appendChild(errorDiv);
+    }
+} 

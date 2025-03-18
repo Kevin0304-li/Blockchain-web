@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptography in Blockchain | BlockChain Hub</title>
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../resources.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            <span>BlockChain Hub</span>
+        </div>
+        <div class="nav-links">
+            <a href="../../index.html#home">Home</a>
+            <a href="../../index.html#explore">Explore</a>
+            <a href="../../index.html#market">Market</a>
+            <a href="../../index.html#learn">Learn</a>
+            <a href="../../index.html#connect">Connect</a>
+        </div>
+        <div class="wallet-connect">
+            <button class="connect-btn">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <div class="resource-header">
+        <h1>Cryptography in Blockchain</h1>
+        <p>Understanding the security foundation of blockchain technology</p>
+    </div>
+
+    <div class="resource-container">
+        <aside class="resource-sidebar">
+            <h3>Learning Path</h3>
+            <ul>
+                <li><a href="index.html">Getting Started</a></li>
+                <li><a href="blockchain-basics.html">Blockchain Basics</a></li>
+                <li class="active"><a href="cryptography.html">Cryptography</a></li>
+                <li><a href="consensus.html">Consensus Mechanisms</a></li>
+            </ul>
+            <h3>Related Topics</h3>
+            <ul>
+                <li><a href="../smart-contracts/index.html">Smart Contracts</a></li>
+                <li><a href="../defi/index.html">DeFi Ecosystem</a></li>
+            </ul>
+        </aside>
+
+        <main class="resource-content">
+            <article class="learning-content">
+                <section>
+                    <h2>Cryptography: The Backbone of Blockchain Security</h2>
+                    <p>
+                        Cryptography is the practice and study of techniques for secure communication in the presence of third parties. 
+                        In blockchain, cryptographic techniques provide the security foundation that makes the technology trustless and tamper-resistant.
+                    </p>
+                    
+                    <div class="content-section">
+                        <i class="fas fa-key fa-3x" style="color: var(--secondary-color); margin: 2rem 0;"></i>
+                        <p>
+                            Blockchain technology relies on several cryptographic primitives to ensure security, privacy, and integrity of data. 
+                            These cryptographic techniques work together to create a secure and decentralized system that doesn't rely on trust between parties.
+                        </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Key Cryptographic Components in Blockchain</h2>
+                    
+                    <h3>1. Hash Functions</h3>
+                    <p>
+                        A hash function takes an input (or 'message') of any length and produces a fixed-length output, called the hash value or digest.
+                        In blockchain, hash functions are used to:
+                    </p>
+                    <ul>
+                        <li>Create unique block identifiers</li>
+                        <li>Link blocks together (each block contains the hash of the previous block)</li>
+                        <li>Secure the mining process (in proof-of-work systems)</li>
+                        <li>Generate addresses from public keys</li>
+                    </ul>
+                    
+                    <div class="blockchain-diagram">
+                        <div class="block">
+                            <div class="block-header">
+                                <div class="block-title">Input Data</div>
+                            </div>
+                            <div class="block-content">
+                                <div class="block-data">"Hello, Blockchain!"</div>
+                            </div>
+                        </div>
+                        <div class="chain-link">→</div>
+                        <div class="block">
+                            <div class="block-header">
+                                <div class="block-title">Hash Function</div>
+                            </div>
+                            <div class="block-content">
+                                <div class="block-data"><i class="fas fa-cogs"></i> SHA-256</div>
+                            </div>
+                        </div>
+                        <div class="chain-link">→</div>
+                        <div class="block">
+                            <div class="block-header">
+                                <div class="block-title">Hash Output</div>
+                            </div>
+                            <div class="block-content">
+                                <div class="block-data">0x4b9e7...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="caption">A visual representation of a hash function in action</p>
+
+                    <h3>2. Public Key Cryptography</h3>
+                    <p>
+                        Public key cryptography (or asymmetric cryptography) uses pairs of keys: public keys and private keys. 
+                        In blockchain, this enables:
+                    </p>
+                    <ul>
+                        <li>Digital signatures to prove ownership of assets</li>
+                        <li>Secure wallet creation and management</li>
+                        <li>Transaction verification without revealing private keys</li>
+                    </ul>
+                    
+                    <h3>3. Digital Signatures</h3>
+                    <p>
+                        Digital signatures are produced by creating a one-way hash of the electronic data to be signed and encrypting the hash with the private key. 
+                        In blockchain, digital signatures are used to:
+                    </p>
+                    <ul>
+                        <li>Authenticate the sender of a transaction</li>
+                        <li>Ensure transaction data hasn't been tampered with</li>
+                        <li>Prevent transaction forgery</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Common Cryptographic Algorithms in Blockchain</h2>
+                    
+                    <div class="applications-grid">
+                        <div class="application-item">
+                            <i class="fas fa-fingerprint"></i>
+                            <h3>SHA-256</h3>
+                            <p>The Secure Hash Algorithm used in Bitcoin and many other blockchains to create 256-bit signatures of data.</p>
+                        </div>
+                        <div class="application-item">
+                            <i class="fas fa-key"></i>
+                            <h3>ECDSA</h3>
+                            <p>Elliptic Curve Digital Signature Algorithm used for creating digital signatures in Bitcoin and other cryptocurrencies.</p>
+                        </div>
+                        <div class="application-item">
+                            <i class="fas fa-user-secret"></i>
+                            <h3>Keccak-256</h3>
+                            <p>The hash function used in Ethereum, a variant of SHA-3 that produces 256-bit hashes.</p>
+                        </div>
+                        <div class="application-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <h3>zk-SNARKs</h3>
+                            <p>Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge, used in privacy-focused blockchains like Zcash.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>How Cryptography Enables Blockchain Properties</h2>
+                    
+                    <h3>Immutability</h3>
+                    <p>
+                        The use of hash functions ensures that once a block is added to the blockchain, any change to the data would result in a completely different hash. 
+                        Since each block contains the hash of the previous block, changing a single block would require recalculating all subsequent blocks, making tampering computationally infeasible.
+                    </p>
+
+                    <h3>Decentralized Trust</h3>
+                    <p>
+                        Public key cryptography and digital signatures allow users to verify transactions without trusting a central authority. 
+                        Anyone can verify that a transaction was authorized by the owner of the funds by checking the digital signature against the sender's public key.
+                    </p>
+
+                    <h3>Pseudonymity</h3>
+                    <p>
+                        Cryptographic techniques enable users to participate in the blockchain network without revealing their real-world identities. 
+                        Users are identified by their public keys or addresses, which are derived from their public keys using hash functions.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Advanced Cryptographic Concepts in Blockchain</h2>
+                    
+                    <h3>Zero-Knowledge Proofs</h3>
+                    <p>
+                        Zero-knowledge proofs allow one party to prove to another that they know a value without conveying any additional information. 
+                        This technology enables privacy-preserving transactions in blockchains like Zcash and privacy features in other platforms.
+                    </p>
+
+                    <h3>Multi-Signature (MultiSig) Technology</h3>
+                    <p>
+                        MultiSig requires multiple signatures (private keys) to authorize a transaction, enhancing security for wallets and smart contracts 
+                        by requiring consensus among multiple parties before funds can be spent.
+                    </p>
+
+                    <h3>Threshold Signatures</h3>
+                    <p>
+                        Similar to MultiSig but more efficient, threshold signatures allow a group of users to produce a single signature 
+                        that can be verified against a single public key, with only a threshold of participants needed.
+                    </p>
+
+                    <h3>Homomorphic Encryption</h3>
+                    <p>
+                        This allows computations to be performed on encrypted data without decrypting it first. 
+                        In blockchain, it could enable confidential smart contract execution without revealing the underlying data.
+                    </p>
+                </section>
+
+                <div class="navigation-buttons">
+                    <a href="blockchain-basics.html" class="prev-button"><i class="fas fa-arrow-left"></i> Back to Blockchain Basics</a>
+                    <a href="consensus.html" class="next-button">Next: Consensus Mechanisms <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BlockChain Hub</h4>
+                <p>Your gateway to the future of finance</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="../../index.html#home">Home</a>
+                <a href="../../index.html#explore">Explore</a>
+                <a href="../../index.html#market">Market</a>
+                <a href="../../index.html#learn">Learn</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="#">Documentation</a>
+                <a href="#">API</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 BlockChain Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../../script.js"></script>
+</body>
+</html> 

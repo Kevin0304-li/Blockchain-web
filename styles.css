@@ -512,4 +512,183 @@ footer {
         height: 300px;
         margin-top: 2rem;
     }
+}
+
+/* Improved Chart Modal Styles */
+.chart-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s;
+    backdrop-filter: blur(3px);
+}
+
+.chart-modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: 2% auto;
+    padding: 0;
+    border-radius: 16px;
+    width: 85%;
+    max-width: 1000px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.4s;
+    overflow: hidden;
+}
+
+.chart-modal-header {
+    padding: 15px 25px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.chart-modal-title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.chart-modal-close {
+    color: white;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.chart-modal-close:hover {
+    color: #f1f1f1;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+#price-chart {
+    padding: 15px 25px 15px;
+    height: auto;
+    min-height: 350px;
+    flex: 1;
+    width: 100%;
+    display: block;
+}
+
+/* Chart Price Summary Info */
+.chart-price-info {
+    padding: 5px 25px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: #f9f9f9;
+    flex-shrink: 0;
+}
+
+.chart-price-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.9rem;
+}
+
+.chart-price-range, .chart-price-change {
+    padding: 8px 15px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chart-price-range span, .chart-price-change span {
+    font-weight: 500;
+}
+
+.min-price, .max-price {
+    font-weight: 600;
+}
+
+.chart-price-change.positive {
+    color: #00B894;
+    background-color: rgba(0, 184, 148, 0.08);
+}
+
+.chart-price-change.negative {
+    color: #FF7675;
+    background-color: rgba(255, 118, 117, 0.08);
+}
+
+/* Error Display */
+.chart-error {
+    padding: 30px;
+    margin: 20px;
+    background-color: #FFF5F5;
+    border-radius: 12px;
+    border-left: 4px solid #FF7675;
+    color: #333;
+}
+
+.chart-error p {
+    margin: 10px 0;
+}
+
+.chart-error ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.chart-error li {
+    margin: 5px 0;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+@keyframes slideDown {
+    from {transform: translateY(-70px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+@media (max-width: 768px) {
+    .chart-modal-content {
+        margin: 3% auto;
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    #price-chart {
+        min-height: 250px;
+    }
+    
+    .chart-modal-title {
+        font-size: 1.2rem;
+    }
+    
+    .chart-price-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .chart-price-range, .chart-price-change {
+        width: 100%;
+    }
 } 
