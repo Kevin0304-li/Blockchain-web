@@ -7,15 +7,27 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bitcoin symbol favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>₿</text></svg>">
     <!-- Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Bitcoin symbol styling */
+        .bitcoin-symbol {
+            color: #f7931a;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="logo">
-            <i class="fas fa-cube"></i>
+            <i class="fas fa-cube" style="color: #1abc9c;"></i>
             <span>BlockChain Hub</span>
         </div>
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
         <div class="nav-links">
             <a href="#home">Home</a>
             <a href="#explore">Explore</a>
@@ -177,7 +189,13 @@
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-discord"></i></a>
                 <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="https://www.linkedin.com/company/university-of-birmingham-dubai-blockchain-society/" target="_blank"><i class="fab fa-linkedin"></i></a>
                 <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="about-us">
+                <h3>About Our Community</h3>
+                <p>Join our vibrant blockchain community where enthusiasts, developers, and industry experts come together to explore the latest in blockchain technology.</p>
+                <p>We're proud to be affiliated with the <a href="https://www.linkedin.com/company/university-of-birmingham-dubai-blockchain-society/" target="_blank">University of Birmingham Dubai Blockchain Society</a>, a student-driven community dedicated to exploring blockchain technology, cryptocurrencies, and Web3 innovations.</p>
             </div>
             <div class="newsletter">
                 <h3>Stay Updated</h3>
@@ -185,6 +203,7 @@
                     <input type="email" placeholder="Enter your email">
                     <button type="submit">Subscribe</button>
                 </form>
+                <p class="newsletter-info">Get weekly updates on market trends, learning resources, and community events.</p>
             </div>
         </div>
     </section>
@@ -192,7 +211,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h4>BlockChain Hub</h4>
+                <h4><span class="bitcoin-symbol">₿</span> BlockChain Hub</h4>
                 <p>Your gateway to the future of finance</p>
             </div>
             <div class="footer-section">
